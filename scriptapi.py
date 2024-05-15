@@ -10,27 +10,27 @@ def hello_world():
 def goodbye_world():
     return "Goodbye, World!"
 
-# @app.route("/pokemon/<name>")
-# def pokemon(name):
-#     response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
-#     if response.status_code == 200:
-#         pokemon_data = response.json()
-#         pokemon_name = pokemon_data['name']
-#         pokemon_id = pokemon_data['id']
-#         return f"Name: {pokemon_name}, ID: {pokemon_id}"
-#     else: 
-#         return "Pokemon not found!"
+@app.route("/pokemon/<name>")
+def pokemon(name):
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{name}")
+    if response.status_code == 200:
+        pokemon_data = response.json()
+        pokemon_name = pokemon_data['name']
+        pokemon_id = pokemon_data['id']
+        return f"Name: {pokemon_name}, ID: {pokemon_id}"
+    else: 
+        return "Pokemon not found!"
     
-# @app.route("/stw/<id>")
-# def starwars(id) :
-#     response2 = requests.get(f"https://swapi.dev/api/people/{id}")
-#     if response2.status_code == 200:
-#         stw_data = response2.json()
-#         stw_name = stw_data['name']
-#         stw_mass = stw_data['mass']
-#         return f"Name: {stw_name}, Mass: {stw_mass}"
-#     else :
-#         return "Character not found!"
+@app.route("/stw/<id>")
+def starwars(id) :
+    response2 = requests.get(f"https://swapi.dev/api/people/{id}")
+    if response2.status_code == 200:
+        stw_data = response2.json()
+        stw_name = stw_data['name']
+        stw_mass = stw_data['mass']
+        return f"Name: {stw_name}, Mass: {stw_mass}"
+    else :
+        return "Character not found!"
     # Autre façon de faire (=exeption)
     # try :
     #     stw_data = response2.json()
@@ -39,7 +39,6 @@ def goodbye_world():
     #   return True
     # except :
     #     return False
-
 
 @app.route("/find/<univers>/<name>")
 def find(univers,name):
@@ -61,5 +60,4 @@ def find(univers,name):
             return "Pokemon not found!"
     else :
         return "univers non reconnu !"
-
 app.run()
