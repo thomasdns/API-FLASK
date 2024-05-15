@@ -1,45 +1,40 @@
 class Voiture:
-    def __init__(self, marque, couleur, vitesse_max, quantite_essence):
-        self.marque = marque
-        self.couleur = couleur
-        self.vitesse_max = vitesse_max
-        self.quantite_essence = quantite_essence
-        self.position = 0
-        self.vitesse_actuelle = 0
+    def __init__(self, position_x, position_y):
+        self.position_x = position_x
+        self.position_y = position_y
 
     def avancer(self, distance):
-        if self.vitesse_actuelle > 0:
-            self.position += distance * self.vitesse_actuelle
-            print(f"{self.marque} avance de {distance} unités. Nouvelle position : {self.position}")
-        else:
-            print("La voiture est à l'arrêt.")
+        self.position_y += distance
 
     def reculer(self, distance):
-        if self.vitesse_actuelle > 0:
-            self.position -= distance * self.vitesse_actuelle
-            print(f"{self.marque} recule de {distance} unités. Nouvelle position : {self.position}")
-        else:
-            print("La voiture est à l'arrêt.")
+        self.position_y -= distance
 
-    def changer_vitesse(self, nouvelle_vitesse):
-        if nouvelle_vitesse <= self.vitesse_max:
-            self.vitesse_actuelle = nouvelle_vitesse
-            print(f"{self.marque} roule maintenant à {self.vitesse_actuelle} km/h.")
-        else:
-            print("La vitesse demandée dépasse la vitesse maximale de la voiture.")
+    def tourner_gauche(self,distance):
+        self.position_x -= distance
 
-    def ajouter_essence(self, quantite):
-        self.quantite_essence += quantite
-        print(f"{quantite} litres d'essence ajoutés. Nouvelle quantité d'essence : {self.quantite_essence} litres.")
+    def tourner_droite(self,distance):
+        self.position_x += distance
 
-# Création d'une instance de la classe Voiture
-ma_voiture = Voiture("Toyota", "Rouge", 200, 50)
+    def afficher_position(self):
+        print("Position actuelle de la voiture : ({}, {})".format(self.position_x, self.position_y))
 
-# Changer la vitesse de la voiture
-ma_voiture.changer_vitesse(100)
+# Création d'une voiture à la position initiale (0, 0)
+ma_voiture = Voiture(0, 0)
 
-# Avancer la voiture
-ma_voiture.avancer(10)
+# Exécution du trajet
+actions = ['avancer', 'tourner_droite', 'reculer', 'tourner_gauche']
 
-# Ajouter de l'essence à la voiture
-ma_voiture.ajouter_essence(20)
+for action in actions:
+    if action == 'avancer':
+        distance = int(input("Entrez la distance à avancer : "))
+        ma_voiture.avancer(distance)
+    elif action == 'reculer':
+        distance = int(input("Entrez la distance à reculer : "))
+        ma_voiture.reculer(distance)
+    elif action == 'tourner_gauche':
+        distance = int(input("Entrez la distance à tourner a gauche : "))
+        ma_voiture.tourner_gauche(distance)
+    elif action == 'tourner_droite':
+        distance = int(input("Entrez la distance à tourner à droite : "))
+        ma_voiture.tourner_droite(distance)
+    ma_voiture.afficher_position()
