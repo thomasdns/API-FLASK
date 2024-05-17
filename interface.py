@@ -11,7 +11,8 @@ class RequestsApp(customtkinter.CTk):
     
     user_input = ""
     conversation = []  # Liste pour stocker les messages de la conversation
-   
+    style_instruction = ""  # Variable pour stocker l'instruction de style
+    
     def __init__(self):
         super().__init__()
         self.title("Mon application #1")
@@ -49,7 +50,11 @@ class RequestsApp(customtkinter.CTk):
         
         self.user_text = customtkinter.CTkEntry(master=self.text_frame, height=10, width=800)
         self.user_text.grid()
-        
+
+        # Champ de saisie pour l'instruction de style
+        self.style_text = customtkinter.CTkEntry(master=self.text_frame, height=10, width=800, placeholder_text="Entrez le style de réponse souhaité ici")
+        self.style_text.grid(pady=10)
+
         # Partie fil de conversation
         self.conversation_frame = customtkinter.CTkFrame(self, width=1000, corner_radius=0)
         self.conversation_frame.grid(row=1, column=0, columnspan=1)
@@ -75,11 +80,22 @@ class RequestsApp(customtkinter.CTk):
         # Récupérer la température du slider
         temperature = self.temperature_slider.get()
 
+        # Récupérer l'instruction de style de réponse
+        self.style_instruction = self.style_text.get()
+
+        # Créer la liste des messages à envoyer à l'API
+        messages_with_instruction = self.conversation.copy()
+
+        # Ajouter l'instruction de style si elle n'est pas vide
+        if self.style_instruction:
+            instruction_message = {"role": "system", "content": f"L'utilisateur souhaite que les réponses soient formulées de cette manière : {self.style_instruction}"}
+            messages_with_instruction.insert(0, instruction_message)
+
         # Appeler l'API OpenAI avec la conversation
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                messages=self.conversation,  # Passer tous les messages de la conversation à l'API
+                messages=messages_with_instruction,  # Passer tous les messages de la conversation avec l'instruction
                 temperature=temperature  # Ajuster la température ici
             )
             self.api_result = response.choices[0].message.content
